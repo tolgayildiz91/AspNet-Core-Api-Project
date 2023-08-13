@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace HotelProject.WebUI.Dtos
+namespace HotelProject.WebUI.Dtos.ServiceDto
 {
     public class ResultServiceDto
     {

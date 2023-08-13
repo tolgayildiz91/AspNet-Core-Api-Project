@@ -1,4 +1,4 @@
-﻿using HotelProject.WebUI.Dtos;
+﻿using HotelProject.WebUI.Dtos.ServiceDto;
 using HotelProject.WebUI.Models.Staff;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -39,12 +39,16 @@ namespace HotelProject.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddStaff(AddStaffViewModel model)
+        public async Task<IActionResult> AddService(CreateServiceDto model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
             var client = _httpClientFactory.CreateClient();
             var jsonData = JsonConvert.SerializeObject(model);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var responseMessage = await client.PostAsync("http://localhost:2177/api/Staff", stringContent);
+            var responseMessage = await client.PostAsync("http://localhost:2177/api/Service", stringContent);
             if (responseMessage.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
@@ -54,10 +58,10 @@ namespace HotelProject.WebUI.Controllers
         }
 
 
-        public async Task<IActionResult> DeleteStaff(int id)
+        public async Task<IActionResult> DeleteService(int id)
         {
             var client = _httpClientFactory.CreateClient();
-            var responseMessage = await client.DeleteAsync($"http://localhost:2177/api/Staff/{id}");
+            var responseMessage = await client.DeleteAsync($"http://localhost:2177/api/Service/{id}");
             if (responseMessage.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
@@ -67,14 +71,14 @@ namespace HotelProject.WebUI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> UpdateStaff(int id)
+        public async Task<IActionResult> UpdateService(int id)
         {
             var client = _httpClientFactory.CreateClient();
-            var responseMessage = await client.GetAsync($"http://localhost:2177/api/Staff/{id}");
+            var responseMessage = await client.GetAsync($"http://localhost:2177/api/Service/{id}");
             if (responseMessage.IsSuccessStatusCode)
             {
                 var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<UpdateStafViewModel>(jsonData);
+                var values = JsonConvert.DeserializeObject<UpdateServiceDto>(jsonData);
                 return View(values);
             }
 
@@ -84,12 +88,16 @@ namespace HotelProject.WebUI.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> UpdateStaff(UpdateStafViewModel model)
+        public async Task<IActionResult> UpdateService(UpdateServiceDto model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View();
+            }
             var client = _httpClientFactory.CreateClient();
             var jsonData = JsonConvert.SerializeObject(model);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var responseMessage = await client.PutAsync("http://localhost:2177/api/Staff/", stringContent);
+            var responseMessage = await client.PutAsync("http://localhost:2177/api/Service/", stringContent);
             if (responseMessage.IsSuccessStatusCode)
             {
 
