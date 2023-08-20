@@ -1,4 +1,4 @@
-﻿using HotelProject.WebUI.Dtos.BookingDto;
+﻿using HotelProject.WebUI.Dtos.RoomDto;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -8,79 +8,75 @@ using System.Threading.Tasks;
 
 namespace HotelProject.WebUI.Controllers
 {
-    public class BookingAdminController : Controller
+    public class AdminRoomController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        public BookingAdminController(IHttpClientFactory httpClientFactory)
+        public AdminRoomController(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }
         public async Task<IActionResult> Index()
         {
             var client = _httpClientFactory.CreateClient();
-            var responseMessage = await client.GetAsync("http://localhost:2177/api/Booking");
+            var responseMessage = await client.GetAsync("http://localhost:2177/api/Room");
             if (responseMessage.IsSuccessStatusCode)
             {
                 var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<List<ResultBookingDto>>(jsonData);
+                var values = JsonConvert.DeserializeObject<List<ResultRoomDto>>(jsonData);
                 return View(values);
-            }
-            return View();
-        }
-
-        public async Task<IActionResult> ApprovedReservation2(int id)
-        {
-            var client = _httpClientFactory.CreateClient();
-            var responseMessage = await client.GetAsync($"http://localhost:2177/api/Booking/BookingAproved?id={id}");
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index");
-            }
-            return View();
-        }
-
-        public async Task<IActionResult> CancelReservation(int id)
-        {
-            var client = _httpClientFactory.CreateClient();
-            var responseMessage = await client.GetAsync($"http://localhost:2177/api/Booking/BookingCancel?id={id}");
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index");
-            }
-            return View();
-        }
-
-        public async Task<IActionResult> WaitReservation(int id)
-        {
-            var client = _httpClientFactory.CreateClient();
-            var responseMessage = await client.GetAsync($"http://localhost:2177/api/Booking/BookingWait?id={id}");
-            if (responseMessage.IsSuccessStatusCode)
-            {
-                return RedirectToAction("Index");
             }
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> UpdateBooking(int id)
+        public IActionResult AddRoom()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> AddRoom(CreateRoomDto createRoomDto)
         {
             var client = _httpClientFactory.CreateClient();
-            var responseMessage = await client.GetAsync($"http://localhost:2177/api/Booking/{id}");
+            var jsonData = JsonConvert.SerializeObject(createRoomDto);
+            StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            var responseMessage = await client.PostAsync("http://localhost:2177/api/Room", stringContent);
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+        public async Task<IActionResult> DeleteRoom(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var responseMessage = await client.DeleteAsync($"http://localhost:2177/api/Room/{id}");
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateRoom(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var responseMessage = await client.GetAsync($"http://localhost:2177/api/Room/{id}");
             if (responseMessage.IsSuccessStatusCode)
             {
                 var jsonData = await responseMessage.Content.ReadAsStringAsync();
-                var values = JsonConvert.DeserializeObject<UpdateBookingDto>(jsonData);
+                var values = JsonConvert.DeserializeObject<UpdateRoomDto>(jsonData);
                 return View(values);
             }
             return View();
         }
-        [HttpPost]
-        public async Task<IActionResult> UpdateBooking(UpdateBookingDto updateBookingDto)
-        {
 
+        [HttpPost]
+        public async Task<IActionResult> UpdateRoom(UpdateRoomDto updateRoomDto)
+        {
             var client = _httpClientFactory.CreateClient();
-            var jsonData = JsonConvert.SerializeObject(updateBookingDto);
+            var jsonData = JsonConvert.SerializeObject(updateRoomDto);
             StringContent stringContent = new StringContent(jsonData, Encoding.UTF8, "application/json");
-            var responseMessage = await client.PutAsync("http://localhost:2177/api/Booking/UpdateBooking/", stringContent);
+            var responseMessage = await client.PutAsync("http://localhost:2177/api/Room/", stringContent);
             if (responseMessage.IsSuccessStatusCode)
             {
                 return RedirectToAction("Index");
