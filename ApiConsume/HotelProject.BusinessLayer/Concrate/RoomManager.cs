@@ -12,12 +12,10 @@ namespace HotelProject.BusinessLayer.Concrate
     public class RoomManager : IRoomService
     {
         private readonly IRoomDal _roomDal;
-
         public RoomManager(IRoomDal roomDal)
         {
             _roomDal = roomDal;
         }
-
         public void TDelete(Room t)
         {
             _roomDal.Delete(t);
@@ -36,6 +34,11 @@ namespace HotelProject.BusinessLayer.Concrate
         public void TInsert(Room t)
         {
             _roomDal.Insert(t);
+        }
+
+        public int TRoomCount()
+        {
+            return _roomDal.RoomCount();
         }
 
         public void TUpdate(Room t)

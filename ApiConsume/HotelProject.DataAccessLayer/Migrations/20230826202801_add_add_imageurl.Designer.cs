@@ -4,14 +4,16 @@ using HotelProject.DataAccessLayer.Concrete;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HotelProject.DataAccessLayer.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20230826202801_add_add_imageurl")]
+    partial class add_add_imageurl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,18 +97,12 @@ namespace HotelProject.DataAccessLayer.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Gender")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
@@ -150,10 +146,7 @@ namespace HotelProject.DataAccessLayer.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("WorkDepartment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("WorkLocationID")
+                    b.Property<int?>("WorkLocationID")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -188,12 +181,6 @@ namespace HotelProject.DataAccessLayer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ChildCount")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
@@ -564,13 +551,9 @@ namespace HotelProject.DataAccessLayer.Migrations
 
             modelBuilder.Entity("HotelProject.EntityLayer.Concrete.AppUser", b =>
                 {
-                    b.HasOne("HotelProject.EntityLayer.Concrete.WorkLocation", "WorkLocation")
+                    b.HasOne("HotelProject.EntityLayer.Concrete.WorkLocation", null)
                         .WithMany("AppUsers")
-                        .HasForeignKey("WorkLocationID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("WorkLocation");
+                        .HasForeignKey("WorkLocationID");
                 });
 
             modelBuilder.Entity("HotelProject.EntityLayer.Concrete.Contact", b =>

@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace HotelProject.BusinessLayer.Abstract
 {
-    public interface IStaffService:IGenericService<Staff>
+    public interface IAppUserService : IGenericService<AppUser>
     {
-        int TGetStaffCount();
-        List<Staff> TLast4Staff();
+        List<AppUser> TUserListWithWorkLocation();
+        List<AppUser> TUsersListWithWorkLocations();
+        int TAppUserCount();
     }
 }
